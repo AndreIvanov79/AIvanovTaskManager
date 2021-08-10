@@ -3,6 +3,7 @@ package com.stefanini.taskmanager.entities;
 import com.stefanini.taskmanager.entities.Task;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -11,7 +12,27 @@ public class User implements Serializable {
     private String lastName;
     private String userName;
     private int taskCounter = 0;
-    LinkedList<Task> myTasks;
+    ArrayList<Task> myTasks;
+
+    public User(String firstName, String lastName, String userName,ArrayList<Task> myTasks) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.myTasks = new ArrayList<Task>();
+    }
+
+    public User(String firstName, String lastName, String userName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+    }
+
+    public User(String userName){
+        this.userName=userName;
+    }
+
+    public User() {
+    }
 
     public String getFirstName() {
         return firstName;
@@ -41,25 +62,18 @@ public class User implements Serializable {
         return taskCounter;
     }
 
-    public LinkedList<Task> getMyTasks(){
-        this.myTasks=new LinkedList<>();
+    public ArrayList<Task> getMyTasks(){
+        if (myTasks==null){
+        this.myTasks=new ArrayList<Task>();}
         return myTasks;
     }
     public int setTaskCounter(){
         return taskCounter++;
     }
 
-
-    public User(String firstName, String lastName, String userName,LinkedList<Task> myTasks) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userName = userName;
-        this.myTasks = new LinkedList<>();
+    public static User getUserByUserName(String userName){
+        return new User(userName);
     }
-
-    public User() {
-    }
-
 
 
     @Override

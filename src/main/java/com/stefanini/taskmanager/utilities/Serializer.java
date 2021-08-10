@@ -4,6 +4,9 @@ import com.stefanini.taskmanager.entities.User;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.util.Map;
+
+import static com.sun.activation.registries.LogSupport.log;
 
 public class Serializer {
     private static final Logger log = Logger.getLogger(Serializer.class);
@@ -17,13 +20,12 @@ public class Serializer {
                     ostream = new ObjectOutputStream(fos);
                     ostream.writeObject(user);
                     flag = true;
-                    log.info("Serialization completed successfully");
                 }
             }
         } catch (FileNotFoundException e) {
-            log.error("Файл не может быть создан: "+ e);
+            log.error("File cannot be created: "+ e);
         } catch (NotSerializableException e) {
-            log.error("Класс не поддерживает сериализацию: " + e);
+            log.error("Class is not supported sirialization: " + e);
         } catch (IOException e) {
             log.error(e);
         } finally {
@@ -32,7 +34,7 @@ public class Serializer {
                     ostream.close();
                 }
             } catch (IOException e) {
-                System.err.println("ошибка закрытия потока");
+                log.error("Error thread closing");
             }
         }
         return flag;
@@ -48,23 +50,26 @@ public class Serializer {
             User user = (User) istream.readObject();
             return user;
         } catch (ClassNotFoundException ce) {
-            System.err.println("Класс не существует: " + ce);
+            log.error("Class doesn`t exist: " + ce);
         } catch (FileNotFoundException fe) {
-            System.err.println("Файл для десериализации не существует: "+ fe);
+            log.error("There is no file for deserialization: "+ fe);
         } catch (InvalidClassException ice) {
-            System.err.println("Несовпадение версий классов: " + ice);
+            log.error("Invalid class versions: " + ice);
         } catch (IOException ioe) {
-            System.err.println("Общая I/O ошибка: " + ioe);
+            System.err.println("General I/O error: " + ioe);
         } finally {
             try {
                 if (istream != null) {
                     istream.close();
                 }
             } catch (IOException e) {
-                System.err.println("ошибка закрытия потока ");
+                log("Thread closing error ");
             }
         }
-        throw new InvalidObjectException("объект не восстановлен");
+        throw new InvalidObjectException("object is not restored");
+    }
+    public User deserializationFromTerminal(Map<String,String> map){
+        return new User(map.get("fn"),map.get("ln"),map.get("un"));
     }
 }
 

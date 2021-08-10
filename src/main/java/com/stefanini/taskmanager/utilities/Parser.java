@@ -12,11 +12,9 @@ import java.util.Map;
 
 public class Parser {
 
-    public User parseFromTerminal(String[] args){
-        System.out.println(Arrays.asList(args));
-
+    public Map<String,String> parseFromTerminal(String[] args){
+        //System.out.println(Arrays.asList(args));
         Map<String, String> parameters = new LinkedHashMap<>();
-        User user=new User();
         for (String arg : args) {
             String[] parts = arg.split("=", 2);
             String key = parts[0];
@@ -28,11 +26,8 @@ public class Parser {
             String value = parts[1];
 
             parameters.put(key, value);
-        } System.out.println(parameters);
-        user.setFirstName(parameters.get("firstName"));
-        user.setLastName(parameters.get("lastName"));
-        user.setUserName(parameters.get("userName"));
-        return user;
+        }// System.out.println(parameters);
+       return parameters;
     }
 
     public User parseFromFile(String file){
