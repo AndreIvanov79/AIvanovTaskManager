@@ -6,18 +6,18 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-public class DBConnection {
-    private static final Logger log = Logger.getLogger(DBConnection.class);
-    private static DBConnection instance;
+public class Connector {
+    private static final Logger log = Logger.getLogger(Connector.class);
+    private static Connector instance;
     private Connection connection;
-    private String url = "jdbc:mysql://localhost:3306/taskmanager";
-    private String username = "aivanov";
-    private String password = "aivanov";
+    private static final String URL = "jdbc:mysql://localhost:3306/taskmanager";
+    private static final String USERNAME = "aivanov";
+    private static final String PASSWORD = "aivanov";
 
-    private DBConnection() throws SQLException {
+    private Connector() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection(url, username, password);
+            this.connection = DriverManager.getConnection(URL,USERNAME,PASSWORD);
         } catch (ClassNotFoundException ex) {
             log.error("Database Connection Creation Failed : " + ex.getMessage());
         }
@@ -27,11 +27,11 @@ public class DBConnection {
         return connection;
     }
 
-    public static DBConnection getInstance() throws SQLException {
+    public static Connector getInstance() throws SQLException {
         if (instance == null) {
-            instance = new DBConnection();
+            instance = new Connector();
         } else if (instance.getConnection().isClosed()) {
-            instance = new DBConnection();
+            instance = new Connector();
         }
 
         return instance;

@@ -6,6 +6,21 @@ import java.util.Objects;
 public class Task implements Serializable {
     private String taskTitle;
     private String description;
+    private String userName;
+
+    public Task(String userName, String taskTitle, String description){
+        this.userName=userName;
+        this.taskTitle=taskTitle;
+        this.description=description;
+    }
+
+    public Task(String taskTitle, String description){
+        this.taskTitle=taskTitle;
+        this.description=description;
+    }
+
+    public Task(){
+    }
 
     public String getTaskTitle() {
         return taskTitle;
@@ -15,6 +30,8 @@ public class Task implements Serializable {
         return description;
     }
 
+    public String getUserName(){return userName;}
+
     public void setTaskTitle(String taskTitle) {
         this.taskTitle = taskTitle;
     }
@@ -23,9 +40,8 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public Task(String taskTitle, String description){
-        this.taskTitle=taskTitle;
-        this.description=description;
+    public void setUserName(String userName){
+        this.userName=userName;
     }
 
     @Override
