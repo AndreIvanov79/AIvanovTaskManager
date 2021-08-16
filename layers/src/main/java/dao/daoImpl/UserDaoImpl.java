@@ -1,77 +1,77 @@
-package com.stefanini.taskmanager.dao.daoImpl;
+package dao.daoImpl;
 
-import com.stefanini.taskmanager.dao.TaskDAO;
-import com.stefanini.taskmanager.utilities.Connector;
+import dao.UserDao;
+import utilities.Connector;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
-public class TaskDAOImpl implements TaskDAO {
-    private static final Logger LOG = Logger.getLogger(TaskDAOImpl.class);
+public class UserDaoImpl implements UserDao{
+    private static final Logger LOG = Logger.getLogger(UserDaoImpl.class);
 
     @Override
-    public void addTaskToUser(String userName, String taskTitle) {
-        long taskID=0;
+    public void createUser(String firstName, String lastName, String userName) throws SQLException {
+        long userID = 0;
         Connection dbConnection = null;
         PreparedStatement statement;
 
         try {
-            String sql = "INSERT INTO tasks (task_title,user_name) VALUES(?,?)";
+            String sql = "INSERT INTO users (first_name,last_name,user_name) VALUES(?,?,?)";
             dbConnection = Connector.getInstance().getConnection();
             statement = dbConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, taskTitle);
-            statement.setString(2, userName);
+            statement.setString(1, firstName);
+            statement.setString(2, lastName);
+            statement.setString(3, userName);
             statement.executeUpdate();
-
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
-                taskID = resultSet.getLong(1);
+                userID = resultSet.getLong(1);
             }
+            LOG.info("User was created");
         } catch (SQLException e) {
             LOG.error(e.getMessage());
+
         }
-        LOG.info("Task was inserted");
     }
 
-   @Override
-    public List<String> showAllUserTasks(String userName){
+    @Override
+    public ArrayList<String> showAllUsers(){
         Connection dbConnection = null;
         PreparedStatement statement;
-        ArrayList<String> tasksList=new ArrayList<>();
+        ArrayList<String> usersList=new ArrayList<>();
         try {
-            String sql = "SELECT * FROM tasks WHERE user_name=?;";
+            String sql = "SELECT user_name FROM users ;";
             dbConnection = Connector.getInstance().getConnection();
             statement = dbConnection.prepareStatement(sql);
-            statement.setString(1,userName);
             ResultSet rs=statement.executeQuery();
             while (rs.next()){
-                tasksList.add(rs.getString("task_title"));
-            };
-            for (String str: tasksList) {
+                usersList.add(rs.getString("user_name"));
+            }
+            for (String str: usersList){
                 LOG.info(str);
             }
         } catch (SQLException e){
             LOG.error(e.getMessage());
         }
-        LOG.info("Tasks presents");
-        return tasksList;
+        LOG.info("Users table presents");
+        return usersList;
     }
 
-    public void deleteAllTasks(){
+    public void deleteAllUsers(){
         Connection dbConnection = null;
         PreparedStatement statement;
 
         try {
-            String sql = "DELETE FROM tasks;";
+            String sql = "DELETE FROM users;";
             dbConnection = Connector.getInstance().getConnection();
             statement = dbConnection.prepareStatement(sql);
             statement.executeUpdate();
         } catch (SQLException e){
             LOG.error(e.getMessage());
         }
-        LOG.info("Tasks table is empty");
+        LOG.info("Users table is empty");
     }
 }
+
 

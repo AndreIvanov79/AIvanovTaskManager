@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.utilities;
+package utilities;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

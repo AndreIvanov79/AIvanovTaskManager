@@ -1,7 +1,7 @@
-package com.stefanini.taskmanager.Services;
+package Services;
 
-import com.stefanini.taskmanager.dao.daoImpl.UserDaoImpl;
-import com.stefanini.taskmanager.utilities.Parser;
+import dao.daoImpl.UserDaoImpl;
+import utilities.Parser;
 
 import java.sql.SQLException;
 import java.util.Map;

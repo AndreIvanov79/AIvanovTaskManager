@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.Services;
+package Services;
 
 import java.sql.SQLException;
 

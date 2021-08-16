@@ -1,7 +1,7 @@
 package com.stefanini.taskmanager;
 
 
-import com.stefanini.taskmanager.Services.ExecutionQuery;
+import Services.ExecutionQuery;
 
 import java.sql.SQLException;
 

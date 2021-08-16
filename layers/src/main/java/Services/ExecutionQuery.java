@@ -1,6 +1,6 @@
-package com.stefanini.taskmanager.Services;
+package Services;
 
-import com.stefanini.taskmanager.utilities.Parser;
+import utilities.Parser;
 import org.apache.log4j.Logger;
 
 import java.sql.SQLException;

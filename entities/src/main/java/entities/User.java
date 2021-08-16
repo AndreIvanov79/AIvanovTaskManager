@@ -1,10 +1,7 @@
-package com.stefanini.taskmanager.entities;
-
-import com.stefanini.taskmanager.entities.Task;
+package entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Objects;
 
 public class User implements Serializable {
