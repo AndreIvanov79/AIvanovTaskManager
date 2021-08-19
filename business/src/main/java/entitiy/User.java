@@ -1,4 +1,4 @@
-package entities;
+package entitiy;
 
 import java.io.Serializable;
 import java.util.ArrayList;
