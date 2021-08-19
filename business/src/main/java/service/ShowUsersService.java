@@ -1,13 +1,13 @@
 package service;
 
-import dao.daoImpl.DaoFactory;
-import dao.daoImpl.UserDaoImpl;
+import dao.daoImpl.UserDAOFactory;
 
 import java.sql.SQLException;
 
 public class ShowUsersService implements ServiceDAO {
     @Override
     public void service(String[] args) throws SQLException {
-        DaoFactory.getUserDAO().showAllUsers();
+        UserDAOFactory userDAOFactory=new UserDAOFactory();
+        userDAOFactory.getListDAO().getList();
     }
 }
