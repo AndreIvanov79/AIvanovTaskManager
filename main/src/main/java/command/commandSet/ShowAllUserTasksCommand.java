@@ -1,19 +1,12 @@
 package command.commandSet;
 
 import command.Command;
-import service.TaskDAOService;
-import service.UserDAOService;
-
-import java.sql.SQLException;
+import service.TaskService;
 
 public class ShowAllUserTasksCommand implements Command {
-    TaskDAOService taskDAOService=new TaskDAOService();
+    TaskService taskDAOService=new TaskService();
     @Override
     public void execute(String[] args){
-        try {
-            taskDAOService.serviceAddListQuery(args);
-        }catch (SQLException e){
-            e.getMessage();
-        }
+        taskDAOService.serviceGetListOf(args);
     }
 }

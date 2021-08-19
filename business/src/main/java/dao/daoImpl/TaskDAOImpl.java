@@ -1,6 +1,7 @@
 package dao.daoImpl;
 
 import dao.TaskDAO;
+import entitiy.Task;
 import org.apache.log4j.Logger;
 import util.Connector;
 

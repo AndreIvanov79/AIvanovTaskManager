@@ -1,18 +1,12 @@
 package command.commandSet;
 
 import command.Command;
-import service.UserDAOService;
-
-import java.sql.SQLException;
+import service.UserService;
 
 public class CreateUserCommand implements Command {
-    UserDAOService userDAOService=new UserDAOService();
+    UserService userDAOService=new UserService();
     @Override
     public void execute(String[] args)  {
-        try {
-            userDAOService.serviceCreateQuery(args);
-        }catch (SQLException e){
-            e.getMessage();
-        }
+        userDAOService.serviceCreateInstance(args);
     }
 }

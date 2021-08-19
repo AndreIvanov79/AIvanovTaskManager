@@ -1,19 +1,12 @@
 package command.commandSet;
 
 import command.Command;
-import service.TaskDAOService;
-import service.UserDAOService;
-
-import java.sql.SQLException;
+import service.UserService;
 
 public class ShowUsersCommand implements Command {
-    UserDAOService userDAOService=new UserDAOService();
+    UserService userDAOService=new UserService();
     @Override
     public void execute(String[] args){
-        try {
-            userDAOService.serviceAddListQuery(args);
-        }catch (SQLException e){
-            e.getMessage();
-        }
+        userDAOService.serviceGetListOf(args);
     }
 }
