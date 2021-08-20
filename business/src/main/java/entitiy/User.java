@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class User implements Serializable, Entity{
+public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String userName;
@@ -31,18 +31,15 @@ public class User implements Serializable, Entity{
     public User() {
     }
 
-    @Override
-    public String getFirstParam() {
+    public String getFirstName() {
         return firstName;
     }
 
-    @Override
-    public String getSecondParam() {
+    public String getLastName() {
         return lastName;
     }
 
-    @Override
-    public String getThirdParam() {
+    public String getUserName() {
         return userName;
     }
 
@@ -78,8 +75,8 @@ public class User implements Serializable, Entity{
 
     @Override
     public String toString() {
-        return "\n\nUser: " + "\nName: " + getFirstParam() + "\nSurname: " + getSecondParam() + "\nUsername: "
-                + getThirdParam() + "\nAmount of Tasks: " + getTaskCounter() ;
+        return "\n\nUser: " + "\nName: " + getFirstName() + "\nSurname: " + getLastName() + "\nUsername: "
+                + getUserName() + "\nAmount of Tasks: " + getTaskCounter() ;
     }
 
     @Override

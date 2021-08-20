@@ -5,9 +5,9 @@ import entitiy.Task;
 
 import java.util.List;
 
-public class TaskService implements Service {
+public class TaskService {
     DAOFactoryImpl daoFactory=new DAOFactoryImpl();
-    @Override
+
     public Task serviceCreateInstance(String[] args) {
         String userName=args[1].substring(4);
         String taskTitle=args[2].substring(4);
@@ -22,7 +22,6 @@ public class TaskService implements Service {
         return task;
     }
 
-    @Override
     public List<String> serviceGetListOf(String[] args) {
         String userName=args[1].substring(4);
 

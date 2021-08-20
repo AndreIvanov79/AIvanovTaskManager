@@ -5,9 +5,9 @@ import entitiy.User;
 
 import java.util.List;
 
-public class UserService implements Service {
+public class UserService {
     DAOFactoryImpl daoFactory=new DAOFactoryImpl();
-    @Override
+
     public User serviceCreateInstance(String[] args) {
         String firstName=args[1].substring(4);
         String lastName=args[2].substring(4);
@@ -22,7 +22,6 @@ public class UserService implements Service {
         return user;
     }
 
-    @Override
     public List<String> serviceGetListOf(String[] args) {
         List<String> list=daoFactory.getUserDAO().showAllUsers();
         daoFactory.getUserDAO().showAllUsers();

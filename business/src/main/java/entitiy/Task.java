@@ -3,7 +3,7 @@ package entitiy;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Task implements Serializable, Entity {
+public class Task implements Serializable {
     private String taskTitle;
     private String description;
     private String userName;
@@ -22,18 +22,15 @@ public class Task implements Serializable, Entity {
     public Task(){
     }
 
-    @Override
-    public String getFirstParam() {
+    public String getTaskTitle() {
         return taskTitle;
     }
 
-    @Override
-    public String getSecondParam() {
+    public String getDescription() {
         return description;
     }
 
-    @Override
-    public String getThirdParam() {
+    public String getUserName() {
         return userName;
     }
 
@@ -51,7 +48,7 @@ public class Task implements Serializable, Entity {
 
     @Override
     public String toString() {
-        return "Task- "+getFirstParam()+": "+getSecondParam();
+        return "Task- "+getTaskTitle()+": "+getDescription();
     }
 
     @Override
@@ -59,8 +56,8 @@ public class Task implements Serializable, Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task= (Task) o;
-        return Objects.equals(taskTitle, task.getFirstParam()) &&
-                Objects.equals(description, task.getSecondParam());
+        return Objects.equals(taskTitle, task.getTaskTitle()) &&
+                Objects.equals(description, task.getDescription());
     }
 
     @Override
