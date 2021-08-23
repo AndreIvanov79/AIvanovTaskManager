@@ -1,4 +1,6 @@
-package dao;
+package dao.daoImpl;
+
+import entity.Task;
 
 import java.util.List;
 
@@ -21,5 +23,5 @@ public interface TaskDAO{
      * @param userName User whose data collecting this Method.
      * @return List of Titles of Tasks assigned to this User.
      */
-    List<String> showUserTasks(String userName);
+    List<Task> showUserTasks(String userName);
 }

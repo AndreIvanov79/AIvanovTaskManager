@@ -1,6 +1,7 @@
-package dao.daoImpl;
+package dao.jdbc;
 
-import dao.UserDAO;
+import dao.daoImpl.UserDAO;
+import entity.User;
 import org.apache.log4j.Logger;
 import util.Connector;
 
@@ -39,21 +40,25 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<String> showAllUsers() {
+    public List<User> showAllUsers() {
         Connection dbConnection = null;
         PreparedStatement statement;
-        ArrayList<String> usersList=new ArrayList<>();
+        ArrayList<User> usersList=new ArrayList<>();
         try {
-            String sql = "SELECT user_name FROM users ;";
+            String sql = "SELECT * FROM users ;";
             dbConnection = Connector.getInstance().getConnection();
             statement = dbConnection.prepareStatement(sql);
             ResultSet resultSet=statement.executeQuery();
             while (resultSet.next()){
-                usersList.add(resultSet.getString("user_name"));
+                User user=new User();
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setUserName(resultSet.getString("user_name"));
+                usersList.add(user);
             }
             LOG.info("List of existing users: ");
-            for (String str: usersList){
-                LOG.info(str);
+            for (User user: usersList){
+                LOG.info(user.toString());
             }
             resultSet.close();
             statement.close();

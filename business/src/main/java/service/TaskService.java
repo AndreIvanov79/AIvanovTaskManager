@@ -1,7 +1,8 @@
 package service;
 
 import dao.daoImpl.DAOFactoryImpl;
-import entitiy.Task;
+import dao.daoImpl.TypeOfFactory;
+import entity.Task;
 
 import java.util.List;
 
@@ -18,15 +19,14 @@ public class TaskService {
         task.setDescription(description);
         task.setUserName(userName);
 
-        daoFactory.getTaskDAO().createTask(taskTitle,description,userName);
+        daoFactory.getTaskDAO(TypeOfFactory.HIBER).createTask(taskTitle,description,userName);
         return task;
     }
 
-    public List<String> serviceGetListOf(String[] args) {
+    public List<Task> serviceGetListOf(String[] args) {
         String userName=args[1].substring(4);
 
-        List<String> list=daoFactory.getTaskDAO().showUserTasks(userName);
-        daoFactory.getTaskDAO().showUserTasks(userName);
+        List<Task> list=daoFactory.getTaskDAO(TypeOfFactory.HIBER).showUserTasks(userName);
         return list;
     }
 }

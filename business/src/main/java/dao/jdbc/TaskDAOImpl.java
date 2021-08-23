@@ -1,7 +1,7 @@
-package dao.daoImpl;
+package dao.jdbc;
 
-import dao.TaskDAO;
-import entitiy.Task;
+import dao.daoImpl.TaskDAO;
+import entity.Task;
 import org.apache.log4j.Logger;
 import util.Connector;
 
@@ -40,10 +40,10 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     @Override
-    public List<String> showUserTasks(String userName) {
+    public List<Task> showUserTasks(String userName) {
         Connection dbConnection = null;
         PreparedStatement statement;
-        ArrayList<String> tasksList=new ArrayList<>();
+        ArrayList<Task> tasksList=new ArrayList<>();
         try {
             String sql = "SELECT * FROM tasks WHERE user_name=?;";
             dbConnection = Connector.getInstance().getConnection();
@@ -51,10 +51,14 @@ public class TaskDAOImpl implements TaskDAO {
             statement.setString(1,userName);
             ResultSet resultSet=statement.executeQuery();
             while (resultSet.next()){
-                tasksList.add(resultSet.getString("description"));
+                Task task=new Task();
+                task.setTaskTitle(resultSet.getString("task_title"));
+                task.setDescription(resultSet.getString("description"));
+                task.setUserName(resultSet.getString("user_name"));
+                tasksList.add(task);
             };
-            for (String str: tasksList) {
-                LOG.info(userName+" has task: "+str);
+            for (Task task: tasksList) {
+                LOG.info(userName+" has task: "+task.toString());
             }
             resultSet.close();
             statement.close();

@@ -1,4 +1,6 @@
-package dao;
+package dao.daoImpl;
+
+import entity.User;
 
 import java.util.List;
 
@@ -21,5 +23,5 @@ public interface UserDAO {
      * Method generates all recorded Users from Table and transfers it to the caller object.
      * @return the List of UserNames of the recorded Users.
      */
-    List<String> showAllUsers();
+    List<User> showAllUsers();
 }

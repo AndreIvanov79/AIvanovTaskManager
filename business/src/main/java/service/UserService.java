@@ -1,7 +1,8 @@
 package service;
 
 import dao.daoImpl.DAOFactoryImpl;
-import entitiy.User;
+import dao.daoImpl.TypeOfFactory;
+import entity.User;
 
 import java.util.List;
 
@@ -18,13 +19,12 @@ public class UserService {
         user.setLastName(lastName);
         user.setUserName(userName);
 
-        daoFactory.getUserDAO().createUser(firstName,lastName,userName);
+        daoFactory.getUserDAO(TypeOfFactory.HIBER).createUser(firstName,lastName,userName);
         return user;
     }
 
-    public List<String> serviceGetListOf(String[] args) {
-        List<String> list=daoFactory.getUserDAO().showAllUsers();
-        daoFactory.getUserDAO().showAllUsers();
+    public List<User> serviceGetListOf(String[] args) {
+        List<User> list=daoFactory.getUserDAO(TypeOfFactory.HIBER).showAllUsers();
         return list;
     }
 }

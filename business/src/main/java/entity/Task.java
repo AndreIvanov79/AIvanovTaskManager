@@ -1,11 +1,27 @@
-package entitiy;
+package entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity
+@Table(name = "tasks")
 public class Task implements Serializable {
+
+    @Id
+    @Column(name = "task_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
+    @Column(name = "task_title")
     private String taskTitle;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "user_name")
+   // @ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "user_name")
     private String userName;
 
     public Task(String userName, String taskTitle, String description){
@@ -22,6 +38,8 @@ public class Task implements Serializable {
     public Task(){
     }
 
+    public int getId(){return id;}
+
     public String getTaskTitle() {
         return taskTitle;
     }
@@ -33,6 +51,8 @@ public class Task implements Serializable {
     public String getUserName() {
         return userName;
     }
+
+    public void setId(int id){this.id=id;}
 
     public void setTaskTitle(String taskTitle) {
         this.taskTitle = taskTitle;
