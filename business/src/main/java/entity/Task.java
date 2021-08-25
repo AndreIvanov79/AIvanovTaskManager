@@ -9,9 +9,9 @@ import java.util.Objects;
 public class Task implements Serializable {
 
     @Id
-    @Column(name = "task_id")
+    @Column(name = "id",insertable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    int taskID;
 
     @Column(name = "task_title")
     private String taskTitle;
@@ -19,16 +19,10 @@ public class Task implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "user_name")
-   // @ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "user_name")
-    private String userName;
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
 
-    public Task(String userName, String taskTitle, String description){
-        this.userName=userName;
-        this.taskTitle=taskTitle;
-        this.description=description;
-    }
+    private User userID;
 
     public Task(String taskTitle, String description){
         this.taskTitle=taskTitle;
@@ -38,7 +32,7 @@ public class Task implements Serializable {
     public Task(){
     }
 
-    public int getId(){return id;}
+    public int getTaskID(){return taskID;}
 
     public String getTaskTitle() {
         return taskTitle;
@@ -48,11 +42,9 @@ public class Task implements Serializable {
         return description;
     }
 
-    public String getUserName() {
-        return userName;
-    }
+    public User getUserID(){return userID;}
 
-    public void setId(int id){this.id=id;}
+    public void setTaskID(int taskID){this.taskID = taskID;}
 
     public void setTaskTitle(String taskTitle) {
         this.taskTitle = taskTitle;
@@ -62,9 +54,7 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public void setUserName(String userName){
-        this.userName=userName;
-    }
+    public void setUserID(User userID){this.userID=userID;}
 
     @Override
     public String toString() {

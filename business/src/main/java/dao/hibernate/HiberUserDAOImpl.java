@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import util.HibernateUtil;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -34,14 +35,14 @@ public class HiberUserDAOImpl implements UserDAO {
     @Override
     public List<User> showAllUsers() {
         sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = this.sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
         //Transaction transaction = null;
 
         CriteriaBuilder builder=session.getCriteriaBuilder();
         CriteriaQuery<User> criteria=builder.createQuery(User.class);
         Root<User> root=criteria.from(User.class);
         criteria.select(root);
-        List<User> users=session.createQuery(criteria).list();
+        List<User> users=session.createQuery(criteria).getResultList();
         session.close();
         for (User user: users){
             LOG.info(user.toString());
@@ -51,7 +52,7 @@ public class HiberUserDAOImpl implements UserDAO {
 
     public void updateUser(int id, String firstName ) {
         sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = this.sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
 
         transaction = session.beginTransaction();
@@ -64,7 +65,7 @@ public class HiberUserDAOImpl implements UserDAO {
 
     public void removeUser(int id) {
         sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = this.sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
 
         transaction = session.beginTransaction();

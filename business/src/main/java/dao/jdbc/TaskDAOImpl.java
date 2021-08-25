@@ -1,7 +1,9 @@
 package dao.jdbc;
 
 import dao.daoImpl.TaskDAO;
+import dao.hibernate.UserID;
 import entity.Task;
+import entity.User;
 import org.apache.log4j.Logger;
 import util.Connector;
 
@@ -18,12 +20,12 @@ public class TaskDAOImpl implements TaskDAO {
         PreparedStatement statement;
 
         try {
-            String sql = "INSERT INTO tasks (task_title,description,user_name) VALUES(?,?,?)";
+            String sql = "INSERT INTO tasks (task_title,description,user_id) VALUES(?,?,?)";
             dbConnection = Connector.getInstance().getConnection();
             statement = dbConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, taskTitle);
             statement.setString(2, description);
-            statement.setString(3, userName);
+            statement.setLong(3, UserID.getUserID(userName));
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -45,16 +47,16 @@ public class TaskDAOImpl implements TaskDAO {
         PreparedStatement statement;
         ArrayList<Task> tasksList=new ArrayList<>();
         try {
-            String sql = "SELECT * FROM tasks WHERE user_name=?;";
+            String sql = "SELECT * FROM tasks WHERE user_id=?;";
             dbConnection = Connector.getInstance().getConnection();
             statement = dbConnection.prepareStatement(sql);
-            statement.setString(1,userName);
+            statement.setObject(1,UserID.getUserID(userName));
             ResultSet resultSet=statement.executeQuery();
             while (resultSet.next()){
                 Task task=new Task();
                 task.setTaskTitle(resultSet.getString("task_title"));
                 task.setDescription(resultSet.getString("description"));
-                task.setUserName(resultSet.getString("user_name"));
+               // task.setUserID(resultSet.getInt("user_id"));
                 tasksList.add(task);
             };
             for (Task task: tasksList) {
@@ -67,5 +69,30 @@ public class TaskDAOImpl implements TaskDAO {
             LOG.error(e.getMessage());
         }
         return tasksList;
+    }
+
+    public User getUser(String userName){
+        User user=new User();
+        Connection dbConnection = null;
+        PreparedStatement statement;
+        ArrayList<Task> tasksList=new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM users WHERE user_name=?;";
+            dbConnection = Connector.getInstance().getConnection();
+            statement = dbConnection.prepareStatement(sql);
+            statement.setString(1, userName);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                user.setFirstName(resultSet.getString("user_name"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setUserName(resultSet.getString("user_name"));
+            }
+            resultSet.close();
+            statement.close();
+            dbConnection.close();
+        }catch (SQLException e) {
+            LOG.error(e.getMessage());
+        }
+        return user;
     }
 }

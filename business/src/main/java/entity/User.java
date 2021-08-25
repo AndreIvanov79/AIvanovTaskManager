@@ -3,6 +3,7 @@ package entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,9 +11,9 @@ import java.util.Objects;
 @Table(name = "users")
 public class User implements Serializable {
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id",updatable = false,nullable = false, insertable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    int userID;
 
     @Column(name = "first_name")
     private String firstName;
@@ -20,20 +21,19 @@ public class User implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "user_name",unique = true)
+    @Column(name = "user_name",unique = true,nullable = false)
     private String userName;
 
-   // private int taskCounter = 0;
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "userID",cascade = CascadeType.ALL)
+    //@JoinColumn(name = "user_name")
+    private List<Task> myTasks;
 
-    //@OneToMany(mappedBy = "user_name", cascade = CascadeType.ALL, orphanRemoval = true)
-    //List<Task> myTasks;
-/*
     public User(String firstName, String lastName, String userName,List<Task> myTasks) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.myTasks = new ArrayList<Task>();
-    }*/
+    }
 
     public User(String firstName, String lastName, String userName) {
         this.firstName = firstName;
@@ -48,7 +48,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public int getId(){return id;}
+    public int getUserID(){return userID;}
 
     public String getFirstName() {
         return firstName;
@@ -62,8 +62,8 @@ public class User implements Serializable {
         return userName;
     }
 
-    public void setId(int id){
-        this.id=id;
+    public void setUserID(int userID){
+        this.userID = userID;
     }
 
     public void setFirstName(String firstName) {
@@ -77,19 +77,20 @@ public class User implements Serializable {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-/*
-    public int getTaskCounter() {
-        return taskCounter;
-    }
 
     public List<Task> getMyTasks(){
         if (myTasks==null){
         this.myTasks=new ArrayList<Task>();}
         return myTasks;
     }
-    public int setTaskCounter(){
-        return taskCounter++;
-    }*/
+
+    public Task getTaskFromList(){
+        Task res=null;
+        for (Task task: this.getMyTasks()){
+            res= task;
+        }
+        return res;
+    }
 
     public static User getUserByUserName(String userName){
         return new User(userName);
@@ -99,7 +100,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "\n\nUser: " + "\nName: " + getFirstName() + "\nSurname: " + getLastName() + "\nUsername: "
-                + getUserName() ;
+                + getUserName();//+"\nHas a task: "+this.getTaskFromList();
     }
 
     @Override
