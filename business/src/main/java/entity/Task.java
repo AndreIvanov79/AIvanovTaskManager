@@ -21,10 +21,14 @@ public class Task implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
-
     private User userID;
 
     public Task(String taskTitle, String description){
+        this.taskTitle=taskTitle;
+        this.description=description;
+    }
+
+    public Task(String taskTitle, String description,User userID){
         this.taskTitle=taskTitle;
         this.description=description;
     }

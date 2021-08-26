@@ -8,14 +8,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-import static dao.hibernate.GetUser.getUser;
 
 public class HiberTaskDAOImpl implements TaskDAO {
     private static final Logger LOG = Logger.getLogger(HiberTaskDAOImpl.class);
@@ -27,23 +25,21 @@ public class HiberTaskDAOImpl implements TaskDAO {
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
 
-
-
         try {
-            User user = GetUser.getUser(userName);
-
             transaction = session.beginTransaction();
-            Task task = new Task(taskTitle,description);
+            User user=session.get(User.class,getUserID(userName));
+            Task task = new Task(taskTitle, description);
+            task.setUserID(user);
             System.out.println(task.toString());
+
+            user.addTaskToList(task);
             session.saveOrUpdate(task);
-            user.getMyTasks().add(task);
             transaction.commit();
             session.close();
-            transaction.commit();
-            session.close();
-            LOG.info("Created Task: " + task.toString()+" of User: "+userName);
+            LOG.info("Created Task: " + task.toString() + " of User: " + userName);
+
         }catch (NoSuchFieldError e){
-            e.printStackTrace();
+            LOG.error("This User not exist"+e.getMessage());
         }
     }
 
@@ -51,15 +47,10 @@ public class HiberTaskDAOImpl implements TaskDAO {
     public List<Task> showUserTasks(String userName) {
         sessionFactory = new Configuration().configure().buildSessionFactory();
         Session session = sessionFactory.openSession();
-       // Transaction transaction = null;
+
         User user=getUser(userName);
         List<Task> userTasks=user.getMyTasks();
-        int userID=UserID.getUserID(userName);
-
-
-      /*  Query query = session.createQuery("from tasks where user_id = :userID");
-        query.setParameter("userID", userID) ;
-        userTasks=query.getResultList();*/
+        int userID= getUserID(userName);
 
         CriteriaBuilder builder=session.getCriteriaBuilder();
         CriteriaQuery<Task> criteria=builder.createQuery(Task.class);
@@ -79,8 +70,6 @@ public class HiberTaskDAOImpl implements TaskDAO {
         Transaction transaction = null;
 
         transaction = session.beginTransaction();
-
-
         Task task =(Task) session.get(Task.class, id);
         task.setDescription(description);
         session.update(task);
@@ -103,7 +92,6 @@ public class HiberTaskDAOImpl implements TaskDAO {
     public User getUser(String userName){
         sessionFactory = new Configuration().configure().buildSessionFactory();
         Session session = sessionFactory.openSession();
-        //Transaction transaction = null;
 
         CriteriaBuilder builder=session.getCriteriaBuilder();
         CriteriaQuery<User> criteria=builder.createQuery(User.class);
@@ -113,5 +101,20 @@ public class HiberTaskDAOImpl implements TaskDAO {
         session.close();
         LOG.info("User "+userName+" extracted");
         return user;
+    }
+
+    public static int getUserID(String userName) {
+        sessionFactory = new Configuration().configure().buildSessionFactory();
+        Session session = sessionFactory.openSession();
+
+        CriteriaBuilder builder=session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria=builder.createQuery(User.class);
+        Root<User> root=criteria.from(User.class);
+        criteria.select(root).where(builder.like(root.get("userName"), userName));
+        List<User> users=session.createQuery(criteria).getResultList();
+        session.close();
+        int res= users.get(0).getUserID();
+        System.out.println(res);
+        return res;
     }
 }

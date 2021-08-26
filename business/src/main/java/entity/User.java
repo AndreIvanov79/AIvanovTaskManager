@@ -1,6 +1,7 @@
 package entity;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +26,6 @@ public class User implements Serializable {
     private String userName;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "userID",cascade = CascadeType.ALL)
-    //@JoinColumn(name = "user_name")
     private List<Task> myTasks;
 
     public User(String firstName, String lastName, String userName,List<Task> myTasks) {
@@ -84,6 +84,11 @@ public class User implements Serializable {
         return myTasks;
     }
 
+    public void addTaskToList(Task task){
+        this.getMyTasks().add(task);
+        System.out.println("Task added to: "+this.getUserName());
+    }
+
     public Task getTaskFromList(){
         Task res=null;
         for (Task task: this.getMyTasks()){
@@ -100,7 +105,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "\n\nUser: " + "\nName: " + getFirstName() + "\nSurname: " + getLastName() + "\nUsername: "
-                + getUserName();//+"\nHas a task: "+this.getTaskFromList();
+                + getUserName();
     }
 
     @Override
@@ -111,7 +116,6 @@ public class User implements Serializable {
         return Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
                 Objects.equals(userName, user.userName);
-               // Objects.equals(taskCounter, user.taskCounter);
     }
 
     @Override
