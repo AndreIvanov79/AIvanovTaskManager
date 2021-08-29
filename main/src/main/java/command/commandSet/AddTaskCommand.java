@@ -1,10 +1,10 @@
 package command.commandSet;
 
 import command.Command;
-import service.TaskService;
+import service.serviceImpl.TaskServiceImpl;
 
 public class AddTaskCommand implements Command {
-    TaskService taskDAOService=new TaskService();
+    TaskServiceImpl taskDAOService=new TaskServiceImpl();
     @Override
     public void execute(String[] args){
         taskDAOService.serviceCreateInstance(args);

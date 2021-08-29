@@ -24,4 +24,6 @@ public interface UserDAO {
      * @return the List of UserNames of the recorded Users.
      */
     List<User> showAllUsers();
+
+    void createUserAndAssignTask(String firstName,String lastName,String userName,String taskTitle, String description);
 }

@@ -1,9 +1,6 @@
 package command;
 
-import command.commandSet.AddTaskCommand;
-import command.commandSet.CreateUserCommand;
-import command.commandSet.ShowAllUserTasksCommand;
-import command.commandSet.ShowUsersCommand;
+import command.commandSet.*;
 import org.apache.log4j.Logger;
 
 import java.sql.SQLException;
@@ -15,6 +12,7 @@ public class CommandExecutor {
     public static final String SHOW_ALL_USERS="-showAllUsers";
     public static final String ADD_TASK="-addTask";
     public static final String SHOW_TASKS="-showTasks";
+    public static final String CREATE_USER_AND_ASSIGN_TASK="-createUserAndAssignTask";
 
     public void execute(String[] args) throws SQLException {
         String commandFlag=args[0];
@@ -34,6 +32,10 @@ public class CommandExecutor {
             case SHOW_TASKS:
                 ShowAllUserTasksCommand showAllUserTasksCommand=new ShowAllUserTasksCommand();
                 showAllUserTasksCommand.execute(args);
+                break;
+            case CREATE_USER_AND_ASSIGN_TASK:
+                CreateUserAndAssignTaskCommand createUserAndAssignTaskCommand=new CreateUserAndAssignTaskCommand();
+                createUserAndAssignTaskCommand.execute(args);
                 break;
             default:
                 LOG.error("Invalid arguments");

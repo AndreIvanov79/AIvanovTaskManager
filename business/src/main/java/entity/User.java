@@ -14,7 +14,7 @@ public class User implements Serializable {
     @Id
     @Column(name = "id",updatable = false,nullable = false, insertable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int userID;
+    private int userID;
 
     @Column(name = "first_name")
     private String firstName;
@@ -104,7 +104,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "\n\nUser: " + "\nName: " + getFirstName() + "\nSurname: " + getLastName() + "\nUsername: "
+        return "\n\nUser: " + "\nFirst Name: " + getFirstName() + "\nLast Name: " + getLastName() + "\nUsername: "
                 + getUserName();
     }
 

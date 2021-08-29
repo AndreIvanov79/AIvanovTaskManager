@@ -1,5 +1,8 @@
 package util;
 
+import entity.Task;
+import entity.User;
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,49 +12,24 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
+    private static final Logger LOG = Logger.getLogger(HibernateUtil.class);
+    private static SessionFactory sessionFactory;
 
-    /**
-     * Создание фабрики
-     * @return {@link SessionFactory}
-     * @throws HibernateException
-     */
-
-        private static SessionFactory sessionFactory = buildSessionFactory();
-
-        private static SessionFactory buildSessionFactory() throws HibernateException {
-            /*
-             * Load up the configuration using the hibernate.cfg.xml
-             */
-            Configuration configuration = new Configuration();
-            configuration.configure("hibernate.cfg.xml");
-
-            /*
-             * Build the registry using the properties in the configuration
-             */
-            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-                    configuration.getProperties()).build();
-            return configuration.buildSessionFactory(serviceRegistry);
-        }
-
+    private HibernateUtil() {}
 
     public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            try {
+                Configuration configuration = new Configuration().configure();
+                configuration.addAnnotatedClass(User.class);
+                configuration.addAnnotatedClass(Task.class);
+                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+                sessionFactory = configuration.buildSessionFactory(builder.build());
+
+            } catch (Exception e) {
+                LOG.error("SessionFactory did not created"+e.getMessage());
+            }
+        }
         return sessionFactory;
-    }
-
-    public static void shutdown() {
-        getSessionFactory().close();
-    }
-
-    /**
-     * The main utility method to be used to retreive the transaction.
-     *
-     * @return {@link Transaction} The transaction of the current session
-     */
-    public static Transaction getTransaction() throws Exception {
-        Session s = getSessionFactory().getCurrentSession();
-        Transaction tx = s.beginTransaction();
-        tx.setTimeout(10);
-        return tx;
-        //return getSessionFactory().getCurrentSession().beginTransaction();;
     }
 }

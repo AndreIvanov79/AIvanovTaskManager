@@ -1,30 +1,26 @@
 package service;
 
-import dao.daoImpl.DAOFactoryImpl;
-import dao.daoImpl.TypeOfFactory;
 import entity.User;
+
+/**
+ * Makes a contract for realization commands for translates them in the DataBase queries.
+ */
 
 import java.util.List;
 
-public class UserService {
-    DAOFactoryImpl daoFactory=new DAOFactoryImpl();
+public interface UserService {
 
-    public void serviceCreateInstance(String[] args) {
-        String firstName=args[1].substring(4);
-        String lastName=args[2].substring(4);
-        String userName=args[3].substring(4);
+    /**
+     * Method invokes DAO layer and transfers arguments for build Database query.
+     * @param args necessary arguments for create the User-instance and DataBase query.
+     * @return instance for transfer it further.
+     */
+    User serviceCreateInstance(String[] args);
 
-        User user=new User();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setUserName(userName);
-
-        daoFactory.getUserDAO(TypeOfFactory.HIBER).createUser(firstName,lastName,userName);
-        //return user;
-    }
-
-    public List<User> serviceGetListOf(String[] args) {
-        List<User> list=daoFactory.getUserDAO(TypeOfFactory.HIBER).showAllUsers();
-        return list;
-    }
+    /**
+     * Method invokes DAO layer for create DataBase query
+     * @param args
+     * @return result-list of all user-instances from Database
+     */
+    List<User> serviceGetListOf(String[] args);
 }

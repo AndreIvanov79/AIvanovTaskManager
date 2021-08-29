@@ -68,4 +68,9 @@ public class UserDAOImpl implements UserDAO {
         }
         return usersList;
     }
+
+    @Override
+    public void createUserAndAssignTask(String firstName, String lastName, String userName, String taskTitle, String description) {
+
+    }
 }

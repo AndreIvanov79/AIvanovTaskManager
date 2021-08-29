@@ -10,7 +10,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dao.hibernate.HiberTaskDAOImpl.getUserID;
 
 public class TaskDAOImpl implements TaskDAO {
     private static final Logger LOG = Logger.getLogger(TaskDAOImpl.class);
@@ -26,7 +25,7 @@ public class TaskDAOImpl implements TaskDAO {
             statement = dbConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, taskTitle);
             statement.setString(2, description);
-            statement.setLong(3, getUserID(userName));
+            statement.setLong(3, getUser(userName).getUserID());
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -51,7 +50,7 @@ public class TaskDAOImpl implements TaskDAO {
             String sql = "SELECT * FROM tasks WHERE user_id=?;";
             dbConnection = Connector.getInstance().getConnection();
             statement = dbConnection.prepareStatement(sql);
-            statement.setObject(1,getUserID(userName));
+            statement.setObject(1,getUser(userName).getUserName());
             ResultSet resultSet=statement.executeQuery();
             while (resultSet.next()){
                 Task task=new Task();

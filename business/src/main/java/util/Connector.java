@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import org.apache.log4j.Logger;
 
 public class Connector {
-    private static final Logger log = Logger.getLogger(Connector.class);
+    private static final Logger LOG = Logger.getLogger(Connector.class);
     private static Connector instance;
     private Connection connection;
     private static final String URL = "jdbc:mysql://localhost:3306/taskmanager";
@@ -19,7 +19,7 @@ public class Connector {
             Class.forName("com.mysql.cj.jdbc.Driver");
             this.connection = DriverManager.getConnection(URL,USERNAME,PASSWORD);
         } catch (ClassNotFoundException ex) {
-            log.error("Database Connection Creation Failed : " + ex.getMessage());
+            LOG.error("Database Connection Creation Failed : " + ex.getMessage());
         }
     }
 

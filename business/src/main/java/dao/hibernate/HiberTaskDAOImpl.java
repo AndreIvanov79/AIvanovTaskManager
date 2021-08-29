@@ -4,30 +4,36 @@ import dao.daoImpl.TaskDAO;
 import entity.Task;
 import entity.User;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.procedure.NoSuchParameterException;
+import org.hibernate.query.Query;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+import static dao.hibernate.HiberUserDAOImpl.getUserIDByUserName;
+import static entity.User.getUserByUserName;
+
 
 public class HiberTaskDAOImpl implements TaskDAO {
     private static final Logger LOG = Logger.getLogger(HiberTaskDAOImpl.class);
     private static SessionFactory sessionFactory;
 
+
     @Override
     public void createTask(String taskTitle, String description, String userName) {
         sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = sessionFactory.openSession();
         Transaction transaction = null;
 
-        try {
+        try(Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            User user=session.get(User.class,getUserID(userName));
+            User user = session.get(User.class,getUserIDByUserName(userName));
             Task task = new Task(taskTitle, description);
             task.setUserID(user);
             System.out.println(task.toString());
@@ -35,33 +41,59 @@ public class HiberTaskDAOImpl implements TaskDAO {
             user.addTaskToList(task);
             session.saveOrUpdate(task);
             transaction.commit();
-            session.close();
-            LOG.info("Created Task: " + task.toString() + " of User: " + userName);
 
-        }catch (NoSuchFieldError e){
-            LOG.error("This User not exist"+e.getMessage());
+            LOG.info("Created Task: " + task.toString() + " of User: " + userName);
+        }catch (Exception e){
+            if (transaction!=null){
+                transaction.rollback();
+            } throw e;
         }
+
     }
 
     @Override
     public List<Task> showUserTasks(String userName) {
         sessionFactory = new Configuration().configure().buildSessionFactory();
         Session session = sessionFactory.openSession();
+/*
+        User user=getUserByUserName(userName);
+        //List<Task> userTasks=user.getMyTasks();
 
-        User user=getUser(userName);
-        List<Task> userTasks=user.getMyTasks();
-        int userID= getUserID(userName);
-
-        CriteriaBuilder builder=session.getCriteriaBuilder();
-        CriteriaQuery<Task> criteria=builder.createQuery(Task.class);
-        Root<Task> root=criteria.from(Task.class);
-        criteria.select(root).where(builder.equal(root.get("userID"),userID));
-        userTasks=session.createQuery(criteria).getResultList();
+        Transaction transaction = session.beginTransaction();
+        String hql = "FROM Task t where t.userID= :userID";
+        Query query = session.createQuery(hql);
+        query.setParameter("userID",getUserByUserName(userName).getUserID());
+        List<Task> res = query.getResultList();
+        transaction.commit();
         session.close();
-        for (Task task: userTasks){
+        for (Task task:res){
             LOG.info("The User "+userName+" has: "+task.toString());
         }
-        return userTasks;
+        return res;*/
+
+        User user= getUserByUserName(userName);//session.get(User.class,getUserByUserName(userName).getUserID());
+        List<Task> userTasks=user.getMyTasks();
+        boolean exists = session.createQuery("from User where userName=:userName")
+                                .setParameter("userName",userName)
+                                .uniqueResult() != null;
+
+        if(exists){
+            int userID = getUserIDByUserName(userName);
+
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Task> criteria = builder.createQuery(Task.class);
+            Root<Task> root = criteria.from(Task.class);
+            criteria.select(root).where(builder.equal(root.get("userID"),userID));
+            userTasks = session.createQuery(criteria).getResultList();
+            session.close();
+            for (Task task : userTasks) {
+                LOG.info("The User " + userName + " has: " + task.toString());
+            }
+            return userTasks;
+        } else {
+            throw new NoSuchParameterException("This User doesn`t exist. Enter the existing UserName.");
+        }
+
     }
 
     public void updateTask(int id, String description) {
@@ -87,34 +119,5 @@ public class HiberTaskDAOImpl implements TaskDAO {
         session.delete(task);
         transaction.commit();
         session.close();
-    }
-
-    public User getUser(String userName){
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = sessionFactory.openSession();
-
-        CriteriaBuilder builder=session.getCriteriaBuilder();
-        CriteriaQuery<User> criteria=builder.createQuery(User.class);
-        Root<User> root=criteria.from(User.class);
-        criteria.select(root).where(builder.like(root.get("userName"), userName));
-        User user=session.createQuery(criteria).getSingleResult();
-        session.close();
-        LOG.info("User "+userName+" extracted");
-        return user;
-    }
-
-    public static int getUserID(String userName) {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = sessionFactory.openSession();
-
-        CriteriaBuilder builder=session.getCriteriaBuilder();
-        CriteriaQuery<User> criteria=builder.createQuery(User.class);
-        Root<User> root=criteria.from(User.class);
-        criteria.select(root).where(builder.like(root.get("userName"), userName));
-        List<User> users=session.createQuery(criteria).getResultList();
-        session.close();
-        int res= users.get(0).getUserID();
-        System.out.println(res);
-        return res;
     }
 }
