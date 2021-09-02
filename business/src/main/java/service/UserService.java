@@ -23,4 +23,8 @@ public interface UserService {
      * @return result-list of all user-instances from Database
      */
     List<User> serviceGetListOf(String[] args);
+
+    User serviceCreateUserAndAssignTask(String[] args);
 }
+
+
