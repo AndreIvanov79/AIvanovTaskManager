@@ -1,10 +1,8 @@
 package entity;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +12,7 @@ public class User implements Serializable {
     @Id
     @Column(name = "id",updatable = false,nullable = false, insertable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userID;
+    private int Id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -48,7 +46,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public int getUserID(){return userID;}
+    public int getId(){return Id;}
 
     public String getFirstName() {
         return firstName;
@@ -62,8 +60,8 @@ public class User implements Serializable {
         return userName;
     }
 
-    public void setUserID(int userID){
-        this.userID = userID;
+    public void setId(int userID){
+        this.Id = userID;
     }
 
     public void setFirstName(String firstName) {
@@ -89,23 +87,15 @@ public class User implements Serializable {
         System.out.println("Task added to: "+this.getUserName());
     }
 
-    public Task getTaskFromList(){
-        Task res=null;
-        for (Task task: this.getMyTasks()){
-            res= task;
-        }
-        return res;
-    }
-
-    public static User getUserByUserName(String userName){
-        return new User(userName);
-    }
-
-
     @Override
     public String toString() {
-        return "\n\nUser: " + "\nFirst Name: " + getFirstName() + "\nLast Name: " + getLastName() + "\nUsername: "
-                + getUserName();
+        return "User{" +
+                "userID=" + Id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", myTasks=" + myTasks +
+                '}';
     }
 
     @Override

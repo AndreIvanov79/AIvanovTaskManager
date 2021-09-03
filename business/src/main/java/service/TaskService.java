@@ -13,7 +13,7 @@ public interface TaskService {
     /** Method invokes DAO layer and transfers arguments for build Database query.
      * @param args necessary arguments for create the User-instance and DataBase query.
      */
-    void serviceCreateInstance(String[] args);
+    Task serviceCreateInstance(String[] args);
 
     /**
      * Method invokes DAO layer for create DataBase query

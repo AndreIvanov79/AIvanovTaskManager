@@ -70,7 +70,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void createUserAndAssignTask(String firstName, String lastName, String userName, String taskTitle, String description) {
-
+    public User createUserAndAssignTask(String firstName, String lastName, String userName, String taskTitle, String description) {
+        return new User();
     }
 }

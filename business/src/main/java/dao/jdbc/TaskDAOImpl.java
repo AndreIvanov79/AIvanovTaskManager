@@ -25,7 +25,7 @@ public class TaskDAOImpl implements TaskDAO {
             statement = dbConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, taskTitle);
             statement.setString(2, description);
-            statement.setLong(3, getUser(userName).getUserID());
+            statement.setLong(3, getUser(userName).getId());
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();

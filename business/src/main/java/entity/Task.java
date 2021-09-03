@@ -62,7 +62,7 @@ public class Task implements Serializable {
 
     @Override
     public String toString() {
-        return "Task- "+getTaskTitle()+": "+getDescription();
+        return "Task "+getTaskTitle()+": "+getDescription();
     }
 
     @Override

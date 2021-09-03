@@ -25,5 +25,5 @@ public interface UserDAO {
      */
     List<User> showAllUsers();
 
-    void createUserAndAssignTask(String firstName,String lastName,String userName,String taskTitle, String description);
+    User createUserAndAssignTask(String firstName, String lastName, String userName, String taskTitle, String description);
 }

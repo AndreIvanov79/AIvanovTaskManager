@@ -4,9 +4,8 @@ import dao.daoImpl.DAOFactoryImpl;
 import dao.daoImpl.TypeOfFactory;
 import dao.hibernate.HiberUserDAOImpl;
 import entity.Task;
-import entity.User;
 import service.TaskService;
-import service.annotation.Loggable;
+import annotation.Loggable;
 
 import java.util.List;
 

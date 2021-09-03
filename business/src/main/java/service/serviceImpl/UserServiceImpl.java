@@ -2,11 +2,10 @@ package service.serviceImpl;
 
 import dao.daoImpl.DAOFactoryImpl;
 import dao.daoImpl.TypeOfFactory;
-import entity.Task;
 import entity.User;
 import service.UserService;
-import service.annotation.Loggable;
-import service.annotation.Notifiable;
+import annotation.Loggable;
+import annotation.Notifiable;
 
 import java.util.List;
 
@@ -44,13 +43,9 @@ public class UserServiceImpl implements UserService {
         String userName=args[3].substring(4);
         String taskTitle=args[4].substring(4);
         String description=args[5].substring(4);
+        User user=null;
 
-        daoFactory.getUserDAO(TypeOfFactory.HIBER).createUserAndAssignTask(firstName,lastName,userName,taskTitle,description);
-
-        Task task=new Task(taskTitle,description);
-        User user=new User(firstName,lastName,userName);
-        user.addTaskToList(task);
-        System.out.println("For control: "+user);
+        user=daoFactory.getUserDAO(TypeOfFactory.HIBER).createUserAndAssignTask(firstName,lastName,userName,taskTitle,description);
         return user;
     }
 }
