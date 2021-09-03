@@ -17,7 +17,7 @@ public class NotifyingAspect {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
     @AfterReturning(pointcut = "execution(* *(..)) && @annotation(annotation.Notifiable)", returning = "user")
-    public void mailNotification(JoinPoint joinPoint, User user) throws Throwable {
+    public void mailNotification(JoinPoint joinPoint, User user) {
         String date = simpleDateFormat.format(new Date());
 
         try {

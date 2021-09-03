@@ -23,6 +23,13 @@ public interface UserService {
      * @return result-list of all user-instances from Database
      */
     List<User> serviceGetListOf(String[] args);
+
+    /**
+     *
+     * @param args
+     * @return
+     */
+    User serviceCreateUserAndAssignTask(String[] args);
 }
 
 

@@ -9,23 +9,22 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import util.HibernateUtil;
 
 import java.util.List;
 
 public class HiberUserDAOImpl implements UserDAO {
     private static final Logger LOG = Logger.getLogger(HiberUserDAOImpl.class);
-    private static SessionFactory sessionFactory;
 
     @Override
     public void createUser(String firstName, String lastName, String userName) {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
         Transaction transaction = null;
         User user=null;
         if(firstName==null || lastName==null || userName==null){
             LOG.error("Wrong arguments. Enter valid data.");
         }
 
-        try(Session session = sessionFactory.openSession()) {
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
                 transaction = session.beginTransaction();
                 user = new User(firstName, lastName, userName);
                 session.save(user);
@@ -41,8 +40,7 @@ public class HiberUserDAOImpl implements UserDAO {
 
     @Override
     public List<User> showAllUsers() {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = sessionFactory.openSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         List<User> results=null;
 
@@ -58,10 +56,9 @@ public class HiberUserDAOImpl implements UserDAO {
     }
 
     public void updateUser(int id, String firstName ) {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
         Transaction transaction = null;
 
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             User user = (User) session.get(User.class, id);
             user.setFirstName(firstName);
@@ -76,10 +73,9 @@ public class HiberUserDAOImpl implements UserDAO {
     }
 
     public void removeUser(int id) {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
         Transaction transaction = null;
 
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
         transaction = session.beginTransaction();
         User user = (User) session.get(User.class, id);
         session.delete(user);
@@ -94,11 +90,10 @@ public class HiberUserDAOImpl implements UserDAO {
 
     @Override
     public User createUserAndAssignTask(String firstName,String lastName,String userName,String taskTitle, String description){
-        sessionFactory = new Configuration().configure().buildSessionFactory();
         Transaction transaction = null;
         User user = new User(firstName, lastName, userName);
 
-        try(Session session = sessionFactory.openSession()){
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
         transaction = session.beginTransaction();
         session.save(user);
 
@@ -121,8 +116,7 @@ public class HiberUserDAOImpl implements UserDAO {
     }
 
     public User getUserByUserName(String userName){
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = sessionFactory.openSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
 
         Transaction transaction = null;
         List<User> results=null;

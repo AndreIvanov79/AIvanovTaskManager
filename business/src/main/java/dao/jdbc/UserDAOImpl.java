@@ -1,6 +1,7 @@
 package dao.jdbc;
 
 import dao.daoImpl.UserDAO;
+import entity.Task;
 import entity.User;
 import org.apache.log4j.Logger;
 import util.Connector;
@@ -71,6 +72,9 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User createUserAndAssignTask(String firstName, String lastName, String userName, String taskTitle, String description) {
-        return new User();
+        User user=new User(firstName,lastName,userName);
+        Task task=new Task(taskTitle,description);
+        user.addTaskToList(task);
+        return user;
     }
 }

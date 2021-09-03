@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import util.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +16,9 @@ import java.util.List;
 
 public class HiberTaskDAOImpl implements TaskDAO {
     private static final Logger LOG = Logger.getLogger(HiberTaskDAOImpl.class);
-    private static SessionFactory sessionFactory;
-
 
     @Override
     public void createTask(String taskTitle, String description, String userName) {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
         Transaction transaction = null;
         HiberUserDAOImpl hiberUserDAO=new HiberUserDAOImpl();
         User user=hiberUserDAO.getUserByUserName(userName);
@@ -28,7 +26,7 @@ public class HiberTaskDAOImpl implements TaskDAO {
         task.setUserID(user);
         user.addTaskToList(task);
 
-        try(Session session = sessionFactory.openSession()) {
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.saveOrUpdate(task);
             transaction.commit();
@@ -52,8 +50,7 @@ public class HiberTaskDAOImpl implements TaskDAO {
     }
 
     public void updateTask(int id, String description) {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = sessionFactory.openSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
 
         transaction = session.beginTransaction();
@@ -65,8 +62,7 @@ public class HiberTaskDAOImpl implements TaskDAO {
     }
 
     public void removeTask(int id) {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session session = sessionFactory.openSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
 
         transaction = session.beginTransaction();
