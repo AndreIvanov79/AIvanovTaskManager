@@ -5,9 +5,7 @@ import entity.Task;
 import entity.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import util.HibernateUtil;
 
 import java.util.ArrayList;

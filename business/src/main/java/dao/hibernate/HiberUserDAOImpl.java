@@ -5,9 +5,7 @@ import entity.Task;
 import entity.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
 
@@ -55,6 +53,33 @@ public class HiberUserDAOImpl implements UserDAO {
         return results;
     }
 
+    @Override
+    public User createUserAndAssignTask(String firstName,String lastName,String userName,String taskTitle, String description){
+        Transaction transaction = null;
+        User user = new User(firstName, lastName, userName);
+
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+            session.save(user);
+
+            Task task = new Task(taskTitle, description);
+            task.setUserID(user);
+
+            user.addTaskToList(task);
+            session.saveOrUpdate(task);
+
+            transaction.commit();
+            LOG.info("Created User: "+user+" and Task: "+task+" assigned to User.");
+
+        }catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+                LOG.error("Transaction rolled back."+e.getMessage());
+            }
+        }
+        return user;
+    }
+
     public void updateUser(int id, String firstName ) {
         Transaction transaction = null;
 
@@ -86,33 +111,6 @@ public class HiberUserDAOImpl implements UserDAO {
                 LOG.error("Transaction rolled back."+e.getMessage());
             }
         }
-    }
-
-    @Override
-    public User createUserAndAssignTask(String firstName,String lastName,String userName,String taskTitle, String description){
-        Transaction transaction = null;
-        User user = new User(firstName, lastName, userName);
-
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
-        transaction = session.beginTransaction();
-        session.save(user);
-
-        Task task = new Task(taskTitle, description);
-        task.setUserID(user);
-
-        user.addTaskToList(task);
-        session.saveOrUpdate(task);
-
-        transaction.commit();
-            LOG.info("Created User: "+user+" and Task: "+task+" assigned to User.");
-
-        }catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-                LOG.error("Transaction rolled back."+e.getMessage());
-            }
-        }
-        return user;
     }
 
     public User getUserByUserName(String userName){
