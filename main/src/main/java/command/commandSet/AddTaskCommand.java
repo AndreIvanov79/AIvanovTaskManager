@@ -7,6 +7,9 @@ public class AddTaskCommand implements Command {
     TaskServiceImpl taskDAOService=new TaskServiceImpl();
     @Override
     public void execute(String[] args){
-        taskDAOService.serviceCreateInstance(args);
+        String userName=args[1].substring(4);
+        String taskTitle=args[2].substring(4);
+        String description=args[3].substring(4);
+        taskDAOService.serviceCreateInstance(taskTitle,description,userName);
     }
 }

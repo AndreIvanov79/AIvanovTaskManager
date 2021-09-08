@@ -1,6 +1,6 @@
 package dao.hibernate;
 
-import dao.daoImpl.UserDAO;
+import dao.inter.UserDAO;
 import entity.Task;
 import entity.User;
 import org.apache.log4j.Logger;
@@ -9,7 +9,11 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HiberUserDAOImpl implements UserDAO {
     private static final Logger LOG = Logger.getLogger(HiberUserDAOImpl.class);
@@ -39,18 +43,14 @@ public class HiberUserDAOImpl implements UserDAO {
     @Override
     public List<User> showAllUsers() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-        List<User> results=null;
+        CriteriaBuilder builder=session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria=builder.createQuery(User.class);
+        Root<User> root=criteria.from(User.class);
+        criteria.select(root);
+        List<User> users=session.createQuery(criteria).getResultList();
+        users.stream().forEach(user -> LOG.info(user));
+        return users;
 
-        transaction = session.beginTransaction();
-        String hql = "FROM User";
-        Query query = session.createQuery(hql);
-        results = query.list();
-        transaction.commit();
-        for (User res: results){
-            LOG.info(res.toString());
-        }
-        return results;
     }
 
     @Override
@@ -115,15 +115,18 @@ public class HiberUserDAOImpl implements UserDAO {
 
     public User getUserByUserName(String userName){
         Session session = HibernateUtil.getSessionFactory().openSession();
-
-        Transaction transaction = null;
-        List<User> results=null;
-
-        transaction = session.beginTransaction();
-        Query query = session.createQuery("from User u where u.userName=:userName");
-        query.setParameter("userName",userName);
-        results = query.list();
-        transaction.commit();
-        return results.get(0);
+        User user=null;
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = builder.createQuery(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.select(root).where(builder.like(root.get("userName"), userName));
+            user=session.createQuery(criteria).uniqueResult();
+        }catch (NullPointerException e){
+            LOG.error("This user not exist. "+e.getMessage());
+        }
+        System.out.println(user.toString());
+        return user;
     }
 }
+

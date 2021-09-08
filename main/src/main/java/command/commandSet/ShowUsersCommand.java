@@ -7,6 +7,6 @@ public class ShowUsersCommand implements Command {
     UserServiceImpl userDAOService=new UserServiceImpl();
     @Override
     public void execute(String[] args){
-        userDAOService.serviceGetListOf(args);
+        userDAOService.serviceGetListOf();
     }
 }

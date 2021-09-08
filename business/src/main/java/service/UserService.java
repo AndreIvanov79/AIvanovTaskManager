@@ -12,24 +12,26 @@ public interface UserService {
 
     /**
      * Method invokes DAO layer and transfers arguments for build Database query.
-     * @param args necessary arguments for create the User-instance and DataBase query.
+     * @param firstName necessary arguments for create the User-instance and DataBase query.
+     * @param lastName
+     * @param userName
      * @return instance for transfer it further.
      */
-    User serviceCreateInstance(String[] args);
+    User serviceCreateInstance(String firstName,String lastName,String userName);
 
     /**
      * Method invokes DAO layer for create DataBase query
-     * @param args
+     *
      * @return result-list of all user-instances from Database
      */
-    List<User> serviceGetListOf(String[] args);
+    List<User> serviceGetListOf();
 
     /**
      *
-     * @param args
+     * @param
      * @return
      */
-    User serviceCreateUserAndAssignTask(String[] args);
+    User serviceCreateUserAndAssignTask(String firstName,String lastName,String userName,String taskTitle,String description);
 }
 
 

@@ -1,6 +1,6 @@
 package dao.jdbc;
 
-import dao.daoImpl.UserDAO;
+import dao.inter.UserDAO;
 import entity.Task;
 import entity.User;
 import org.apache.log4j.Logger;

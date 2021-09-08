@@ -1,5 +1,8 @@
 package dao.daoImpl;
 
+import dao.inter.DAOFactory;
+import dao.inter.TaskDAO;
+import dao.inter.UserDAO;
 import dao.hibernate.HiberTaskDAOImpl;
 import dao.hibernate.HiberUserDAOImpl;
 import dao.jdbc.*;

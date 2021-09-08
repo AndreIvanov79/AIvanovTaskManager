@@ -7,6 +7,7 @@ public class ShowAllUserTasksCommand implements Command {
     TaskServiceImpl taskDAOService=new TaskServiceImpl();
     @Override
     public void execute(String[] args){
-        taskDAOService.serviceGetListOf(args);
+        String userName=args[1].substring(4);
+        taskDAOService.serviceGetListOf(userName);
     }
 }
