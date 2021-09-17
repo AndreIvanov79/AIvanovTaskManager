@@ -1,4 +1,4 @@
-package dao.inter;
+package dao;
 
 import entity.User;
 
@@ -16,16 +16,16 @@ public interface UserDAO {
      * @param lastName Data which will records in the DataBase in the appropriate field as the field of the Entity.
      * @param userName Data which will records in the DataBase in the appropriate field as the field of the Entity.
      *                 Should be uniqe.
-     * @see dao.hibernate.HiberUserDAOImpl
-     * @see dao.jdbc.UserDAOImpl
+     * @see dao.hibernateDAO.HiberUserDAOImpl
+     * @see dao.jdbcDAO.UserDAOImpl
      */
     void createUser(String firstName,String lastName,String userName);
 
     /**
      * Method generates all recorded Users from Table and transfers it to the caller object.
      * @return the List of UserNames of the recorded Users.
-     * @see dao.hibernate.HiberUserDAOImpl
-     * @see dao.jdbc.UserDAOImpl
+     * @see dao.hibernateDAO.HiberUserDAOImpl
+     * @see dao.jdbcDAO.UserDAOImpl
      */
     List<User> showAllUsers();
 

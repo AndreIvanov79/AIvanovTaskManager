@@ -2,7 +2,7 @@ package service.serviceImpl;
 
 import dao.daoImpl.DAOFactoryImpl;
 import dao.daoImpl.TypeOfFactory;
-import dao.hibernate.HiberUserDAOImpl;
+import dao.hibernateDAO.HiberUserDAOImpl;
 import entity.Task;
 import service.TaskService;
 import annotation.Loggable;

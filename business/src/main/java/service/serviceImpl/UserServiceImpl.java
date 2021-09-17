@@ -2,7 +2,7 @@ package service.serviceImpl;
 
 import dao.daoImpl.DAOFactoryImpl;
 import dao.daoImpl.TypeOfFactory;
-import dao.inter.UserDAO;
+import dao.UserDAO;
 import entity.User;
 import service.UserService;
 import annotation.Loggable;

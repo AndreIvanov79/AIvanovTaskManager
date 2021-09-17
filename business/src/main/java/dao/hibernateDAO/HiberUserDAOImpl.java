@@ -1,19 +1,17 @@
-package dao.hibernate;
+package dao.hibernateDAO;
 
-import dao.inter.UserDAO;
+import dao.UserDAO;
 import entity.Task;
 import entity.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import util.HibernateUtil;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class HiberUserDAOImpl implements UserDAO {
     private static final Logger LOG = Logger.getLogger(HiberUserDAOImpl.class);
@@ -21,20 +19,20 @@ public class HiberUserDAOImpl implements UserDAO {
     @Override
     public void createUser(String firstName, String lastName, String userName) {
         Transaction transaction = null;
-        User user=null;
-        if(firstName==null || lastName==null || userName==null){
+        User user = null;
+        if (firstName == null || lastName == null || userName == null) {
             LOG.error("Wrong arguments. Enter valid data.");
         }
 
-        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
-                transaction = session.beginTransaction();
-                user = new User(firstName, lastName, userName);
-                session.save(user);
-                transaction.commit();
-        }catch (Exception e) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            user = new User(firstName, lastName, userName);
+            session.save(user);
+            transaction.commit();
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
-               LOG.error("Transaction rolled back."+ e.getMessage());
+                LOG.error("Transaction rolled back." + e.getMessage());
             }
         }
         LOG.info("Created User: " + user.toString());
@@ -43,22 +41,23 @@ public class HiberUserDAOImpl implements UserDAO {
     @Override
     public List<User> showAllUsers() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        CriteriaBuilder builder=session.getCriteriaBuilder();
-        CriteriaQuery<User> criteria=builder.createQuery(User.class);
-        Root<User> root=criteria.from(User.class);
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
         criteria.select(root);
-        List<User> users=session.createQuery(criteria).getResultList();
-        users.stream().forEach(user -> LOG.info(user));
+        List<User> users = session.createQuery(criteria).getResultList();
+        users.stream()
+                .forEach(user -> LOG.info(user));
         return users;
 
     }
 
     @Override
-    public User createUserAndAssignTask(String firstName,String lastName,String userName,String taskTitle, String description){
+    public User createUserAndAssignTask(String firstName, String lastName, String userName, String taskTitle, String description) {
         Transaction transaction = null;
         User user = new User(firstName, lastName, userName);
 
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.save(user);
 
@@ -69,18 +68,18 @@ public class HiberUserDAOImpl implements UserDAO {
             session.saveOrUpdate(task);
 
             transaction.commit();
-            LOG.info("Created User: "+user+" and Task: "+task+" assigned to User.");
+            LOG.info("Created User: " + user + " and Task: " + task + " assigned to User.");
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
-                LOG.error("Transaction rolled back."+e.getMessage());
+                LOG.error("Transaction rolled back." + e.getMessage());
             }
         }
         return user;
     }
 
-    public void updateUser(int id, String firstName ) {
+    public void updateUser(int id, String firstName) {
         Transaction transaction = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -89,10 +88,10 @@ public class HiberUserDAOImpl implements UserDAO {
             user.setFirstName(firstName);
             session.update(user);
             transaction.commit();
-        }catch (Exception e){
-            if(transaction!=null){
+        } catch (Exception e) {
+            if (transaction != null) {
                 transaction.rollback();
-                LOG.error("Transaction rolled back."+e.getMessage());
+                LOG.error("Transaction rolled back." + e.getMessage());
             }
         }
     }
@@ -101,31 +100,31 @@ public class HiberUserDAOImpl implements UserDAO {
         Transaction transaction = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-        transaction = session.beginTransaction();
-        User user = (User) session.get(User.class, id);
-        session.delete(user);
-        transaction.commit();
-        }catch (Exception e){
-            if(transaction!=null){
+            transaction = session.beginTransaction();
+            User user = (User) session.get(User.class, id);
+            session.delete(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
                 transaction.rollback();
-                LOG.error("Transaction rolled back."+e.getMessage());
+                LOG.error("Transaction rolled back." + e.getMessage());
             }
         }
     }
 
-    public User getUserByUserName(String userName){
+    public User getUserByUserName(String userName) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        User user=null;
+        User user = null;
         try {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<User> criteria = builder.createQuery(User.class);
             Root<User> root = criteria.from(User.class);
             criteria.select(root).where(builder.like(root.get("userName"), userName));
-            user=session.createQuery(criteria).uniqueResult();
-        }catch (NullPointerException e){
-            LOG.error("This user not exist. "+e.getMessage());
+            user = session.createQuery(criteria).uniqueResult();
+        } catch (NullPointerException e) {
+            LOG.error("This user not exist. " + e.getMessage());
         }
-        System.out.println(user.toString());
+        LOG.info(user.toString());
         return user;
     }
 }

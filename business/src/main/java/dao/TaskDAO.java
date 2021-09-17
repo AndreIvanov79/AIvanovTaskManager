@@ -1,4 +1,4 @@
-package dao.inter;
+package dao;
 
 import entity.Task;
 

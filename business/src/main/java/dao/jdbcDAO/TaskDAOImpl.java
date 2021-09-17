@@ -1,6 +1,6 @@
-package dao.jdbc;
+package dao.jdbcDAO;
 
-import dao.inter.TaskDAO;
+import dao.TaskDAO;
 import entity.Task;
 import entity.User;
 import org.apache.log4j.Logger;
