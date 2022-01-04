@@ -5,13 +5,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+import static util.PropReader.getUserMailProps;
+
 
 public class MailSender {
-        private static final String USER_NAME = "andrei.ivanov.ext@extendaretail.com";
-        private static final String PASSWORD = "qfzaagzbkdvageoo";
-        private static final String HOST= "smtp.gmail.com";
-        private static final String PORT= "465";
 
+        private static final String USER_NAME = getUserMailProps().getProperty("user_name");//"andrei.ivanov.ext@extendaretail.com";
+        private static final String PASSWORD = getUserMailProps().getProperty("password");//"qfzaagzbkdvageoo";
+        private static final String HOST= getUserMailProps().getProperty("host");//"smtp.gmail.com";
+        private static final String PORT= getUserMailProps().getProperty("port");//"465";
 
     private static final Properties MAIL_PROPERTIES = new Properties(){{
         put("mail.smtp.host", HOST);
@@ -22,7 +24,7 @@ public class MailSender {
         put("mail.smtp.ssl.trust", HOST);
     }};
 
-        public void sendMailMessage(String mailSubject,String mailContent){
+    public void sendMailMessage(String mailSubject,String mailContent){
              Session session = Session.getInstance(MAIL_PROPERTIES,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {

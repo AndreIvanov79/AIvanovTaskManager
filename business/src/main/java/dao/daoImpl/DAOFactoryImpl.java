@@ -1,8 +1,11 @@
 package dao.daoImpl;
 
-import dao.hibernate.HiberTaskDAOImpl;
-import dao.hibernate.HiberUserDAOImpl;
-import dao.jdbc.*;
+import dao.DAOFactory;
+import dao.TaskDAO;
+import dao.UserDAO;
+import dao.hibernateDAO.HiberTaskDAOImpl;
+import dao.hibernateDAO.HiberUserDAOImpl;
+import dao.jdbcDAO.*;
 import org.apache.log4j.Logger;
 
 public class DAOFactoryImpl implements DAOFactory {

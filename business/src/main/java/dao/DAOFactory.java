@@ -1,7 +1,6 @@
-package dao.daoImpl;
+package dao;
 
-import dao.daoImpl.TaskDAO;
-import dao.daoImpl.UserDAO;
+import dao.daoImpl.TypeOfFactory;
 
 /**
  * Make a contract for possibility to initialize instance from where it will be necessary.

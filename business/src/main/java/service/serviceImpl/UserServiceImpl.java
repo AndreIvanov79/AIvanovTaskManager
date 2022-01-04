@@ -2,7 +2,7 @@ package service.serviceImpl;
 
 import dao.daoImpl.DAOFactoryImpl;
 import dao.daoImpl.TypeOfFactory;
-import dao.daoImpl.UserDAO;
+import dao.UserDAO;
 import entity.User;
 import service.UserService;
 import annotation.Loggable;
@@ -16,11 +16,7 @@ public class UserServiceImpl implements UserService {
 
     @Loggable
     @Override
-    public User serviceCreateInstance(String[] args) {
-        String firstName=args[1].substring(4);
-        String lastName=args[2].substring(4);
-        String userName=args[3].substring(4);
-
+    public User serviceCreateInstance(String firstName,String lastName,String userName) {
         User user=new User();
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -32,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Loggable
     @Override
-    public List<User> serviceGetListOf(String[] args) {
+    public List<User> serviceGetListOf() {
         List<User> list=userDAO.showAllUsers();
         return list;
     }
@@ -40,12 +36,8 @@ public class UserServiceImpl implements UserService {
     @Notifiable
     @Loggable
     @Override
-    public User serviceCreateUserAndAssignTask(String[] args){
-        String firstName=args[1].substring(4);
-        String lastName=args[2].substring(4);
-        String userName=args[3].substring(4);
-        String taskTitle=args[4].substring(4);
-        String description=args[5].substring(4);
+    public User serviceCreateUserAndAssignTask(String firstName,String lastName,String userName,String taskTitle,String description){
+
         User user=null;
 
         user=userDAO.createUserAndAssignTask(firstName,lastName,userName,taskTitle,description);

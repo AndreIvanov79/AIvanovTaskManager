@@ -2,7 +2,7 @@ package service.serviceImpl;
 
 import dao.daoImpl.DAOFactoryImpl;
 import dao.daoImpl.TypeOfFactory;
-import dao.hibernate.HiberUserDAOImpl;
+import dao.hibernateDAO.HiberUserDAOImpl;
 import entity.Task;
 import service.TaskService;
 import annotation.Loggable;
@@ -14,11 +14,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Loggable
     @Override
-    public Task serviceCreateInstance(String[] args) {
+    public Task serviceCreateInstance(String taskTitle, String description, String userName) {
         HiberUserDAOImpl hiberUserDAO=new HiberUserDAOImpl();
-        String userName=args[1].substring(4);
-        String taskTitle=args[2].substring(4);
-        String description=args[3].substring(4);
 
         Task task=new Task(taskTitle,description,hiberUserDAO.getUserByUserName(userName));
 
@@ -28,8 +25,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Loggable
     @Override
-    public List<Task> serviceGetListOf(String[] args) {
-        String userName=args[1].substring(4);
+    public List<Task> serviceGetListOf(String userName) {
 
         List<Task> list=daoFactory.getTaskDAO(TypeOfFactory.HIBER).showUserTasks(userName);
         System.out.println(list);
